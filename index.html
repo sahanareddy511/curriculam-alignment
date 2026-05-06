@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill-Twin Engine</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>🚀 Skill-Twin Engine</h1>
+        <p>Upload your resume and get a personalized learning roadmap.</p>
+    </header>
+
+    <!-- ✅ FORM (CONNECTED TO FLASK) -->
+    <div class="card upload-section">
+        <form method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>📄 Upload Resume (.txt, .pdf, .docx)</label>
+                <input type="file" name="resume" accept=".txt,.pdf,.docx" required>
+            </div>
+
+            <div class="form-group">
+                <label>🎯 Select Target Role</label>
+                <select name="role" required>
+                    <option value="" disabled selected>Choose a role...</option>
+
+                    <option value="Data Analyst">Data Analyst</option>
+                    <option value="Web Developer">Web Developer</option>
+                    <option value="AI Engineer">AI Engineer</option>
+                    <option value="Software Tester">Software Tester</option>
+                    <option value="Software Architect">Software Architect</option>
+                    <option value="DevOps Engineer">DevOps Engineer</option>
+                    <option value="Backend Developer">Backend Developer</option>
+                    <option value="Frontend Developer">Frontend Developer</option>
+                    <option value="Full Stack Developer">Full Stack Developer</option>
+
+                </select>
+            </div>
+
+            <button type="submit">✨ Analyze Resume</button>
+        </form>
+    </div>
+
+    <!-- ✅ RESULTS -->
+    {% if skills %}
+    <div class="card result-card">
+        <h2>📊 Analysis Result</h2>
+
+        <!-- Score -->
+        <div class="score-section">
+            <h3>Match Score</h3>
+            <div class="score-circle">
+                <span>{{ score }}%</span>
+            </div>
+        </div>
+
+        <!-- Insight -->
+        <div class="card" style="background:#eef2ff;">
+            <h3>💡 Insight</h3>
+            <p>{{ insight }}</p>
+        </div>
+
+        <!-- Skills -->
+        <div class="skills-section">
+
+            <div class="skill-box">
+                <h3>❌ Missing Skills</h3>
+                <ul>
+                    {% for m in missing %}
+                        <li>{{ m }}</li>
+                    {% else %}
+                        <li>No missing skills 🎉</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="skill-box">
+                <h3>✅ Skills You Have</h3>
+                <ul>
+                    {% for s in skills %}
+                        <li>{{ s }}</li>
+                    {% else %}
+                        <li>No skills detected</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Categorized Skills -->
+        <div class="card">
+            <h3>📂 Skill Categories</h3>
+            {% for category, items in categorized.items() %}
+                <p><strong>{{ category }}:</strong> {{ items | join(', ') }}</p>
+            {% endfor %}
+        </div>
+
+        <!-- Roadmap -->
+        <div class="roadmap-section">
+            <h3>🛣️ Learning Roadmap</h3>
+
+            {% for m in missing %}
+            <div class="roadmap-item">
+                <strong>Step {{ loop.index }}</strong><br>
+                Learn <b>{{ m }}</b> through online courses and projects.<br>
+
+                🎥 Suggested Channels:
+                <ul>
+                    <li>Apna College</li>
+                    <li>Jenny Lectures</li>
+                    <li>CodeWithHarry</li>
+                </ul>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
